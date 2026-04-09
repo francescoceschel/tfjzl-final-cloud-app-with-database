@@ -67,6 +67,33 @@ class Course(models.Model):
         return "Name: " + self.name + "," + \
                "Description: " + self.description
 
+# A Question model will save the questions of an exam with the following characteristics:
+    # Used to persist questions for a course
+    # Has a Many-To-One relationship with the course
+    # Has question text
+    # Has a grade point for each question
+class Question(models.Model):
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    question = models.CharField(max_length = 200)
+    grade = models.IntegerField(default = 0) 
+
+    def __str__(self):
+        return "Question: " + self.question
+
+    	# method to calculate if the learner gets the score of the question
+    def is_get_score(self, selected_ids):
+        all_answers = self.choice_set.filter(is_correct=True).count()
+        selected_correct = self.choice_set.filter(is_correct=True, id__in=selected_ids).count()
+        if all_answers == selected_correct:
+            return True
+        else:
+            return False
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete = models.CASCADE)
+    choice = models.CharField(max_length = 200)
+    is_correct = models.BooleanField(default = False)
+
 
 # Lesson model
 class Lesson(models.Model):
@@ -95,9 +122,11 @@ class Enrollment(models.Model):
     rating = models.FloatField(default=5.0)
 
 
+
+
 # One enrollment could have multiple submission
 # One submission could have multiple choices
 # One choice could belong to multiple submissions
-#class Submission(models.Model):
-#    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
-#    choices = models.ManyToManyField(Choice)
+class Submission(models.Model):
+    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
+    choices = models.ManyToManyField(Choice)
