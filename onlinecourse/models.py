@@ -78,7 +78,7 @@ class Question(models.Model):
     grade = models.IntegerField(default = 0) 
 
     def __str__(self):
-        return "Question: " + self.question
+        return "Question: " + self.content
 
     	# method to calculate if the learner gets the score of the question
     def is_get_score(self, selected_ids):
