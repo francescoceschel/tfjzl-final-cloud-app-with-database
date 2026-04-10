@@ -74,7 +74,7 @@ class Course(models.Model):
     # Has a grade point for each question
 class Question(models.Model):
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
-    question = models.CharField(max_length = 200)
+    content = models.CharField(max_length = 200)
     grade = models.IntegerField(default = 0) 
 
     def __str__(self):
@@ -90,7 +90,7 @@ class Question(models.Model):
             return False
 
 class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete = models.CASCADE)
+    content = models.ForeignKey(Question, on_delete = models.CASCADE)
     choice = models.CharField(max_length = 200)
     is_correct = models.BooleanField(default = False)
 
